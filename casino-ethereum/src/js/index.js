@@ -3,13 +3,217 @@ import ReactDOM from 'react-dom'
 import Web3 from 'web3'
 import './../css/index.css'
 class App extends React.Component {
-   constructor(props){
-      super(props)
-      this.state = {
-         lastWinner: 0,
-         timer: 0
-      }
-   }voteNumber(number){
+    constructor(props){
+        super(props)
+        this.state = {
+           lastWinner: 0,
+           numberOfBets: 0,
+           minimumBet: 0,
+           totalBet: 0,
+           maxAmountOfBets: 0,
+        }  
+         if(typeof web3 != 'undefined'){
+           console.log("Using web3 detected from external source like Metamask")
+           this.web3 = new Web3(web3.currentProvider)
+        }else{
+           this.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"))
+        }   const MyContract = web3.eth.contract([[
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "_minimumBet",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "nonpayable",
+                "type": "constructor"
+            },
+            {
+                "stateMutability": "payable",
+                "type": "fallback"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "numberSelected",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "bet",
+                "outputs": [],
+                "stateMutability": "payable",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "player",
+                        "type": "address"
+                    }
+                ],
+                "name": "checkPlayerExists",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "numberWinner",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "distributePrizes",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "generateNumberWinner",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "kill",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "maxAmountOfBets",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "minimumBet",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "numberOfBets",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "owner",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "name": "playerInfo",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "amountBet",
+                        "type": "uint256"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "numberSelected",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "players",
+                "outputs": [
+                    {
+                        "internalType": "address",
+                        "name": "",
+                        "type": "address"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "totalBet",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "withdraw",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "stateMutability": "payable",
+                "type": "receive"
+            }
+        ]])   
+        this.state.ContractInstance = MyContract.at("0xfcaa36d67d493716b02d195ed78614239c3b53ec")
+     }voteNumber(number){
       console.log(number)
    }render(){
       return (
@@ -40,3 +244,5 @@ class App extends React.Component {
    <App />,
    document.querySelector('#root')
 )
+
+
