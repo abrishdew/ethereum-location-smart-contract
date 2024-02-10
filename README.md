@@ -35,7 +35,7 @@ Using the tools mentioned above the project can be implemented to see its final
 output where we can have an Ethereum smart contract that is based on location.
 
 ### Usage
-Clone the repo: git clone https://github.com/abrishdew/
+Clone the repo: git clone https://github.com/abrishdew/ethereum-location-smart-contract.git
 
 Install dependencies: pip install -r requirements.txt
 
